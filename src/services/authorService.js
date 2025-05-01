@@ -44,10 +44,5 @@ export class AuthorService{
         return await this.AuthorRepository.searchByName(name)
     }
 
-//     deleteAuthoor = async () => {
-//         return await this.AuthorRepository 
-//     }
-//     searchAutorByName  = async () => {
-//         return await this.AuthorRepository
-//     }
+
 }
