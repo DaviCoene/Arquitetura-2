@@ -9,27 +9,25 @@ const { compare } = bcrypt;
 class AuthService {
     async login(dto){
         try {
-            const user = await user.findOne({
+            const userVerify = await user.findOne({
                 email: dto.email,
 
-            }
+            }).select("id email password");
 
-            ).select("id email password");
-
-            if(!user){
+            if(!userVerify){
                 throw new Error("Usuário não cadastrado.")
 
             }
 
-            const passwordsMatch = await compare(dto.password, user.password);
+            const passwordsMatch = await compare(dto.password, userVerify.password);
 
             if (!passwordsMatch) {
                 throw new Error("Usuário ou Senha incorreta.")
             }
 
-            const accessToker = jwt.sign({
-                    id: user.id,
-                    email: user.email,
+            const accessToken = jwt.sign({
+                    id: userVerify.id,
+                    email: userVerify.email,
 
             },
         
@@ -38,10 +36,11 @@ class AuthService {
                 expiresIn: 86400,
             }
         );
+        return { accessToken };
         } catch (error) {
             
         }
     }
 }
 
-export default new AuthService;
+export default AuthService;
