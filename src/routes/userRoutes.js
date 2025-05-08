@@ -3,6 +3,16 @@ import UserController from "../controllers/userController.js"
 
 const routes = express.Router();
 
+
+/**
+ * @Swagger
+ * tags:
+ *  Name:
+ * User
+ * description
+ */
+
+
 routes.get("/user", UserController.getAllUser);
 routes.post("/user", UserController.createUser);
 routes.put("/user/:id", UserController.updateUser);

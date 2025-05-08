@@ -3,6 +3,15 @@ import PostController from "../controllers/postController.js"
 
 const routes = express.Router();
 
+
+/**
+ * @Swagger
+ * tags:
+ *  name: Post
+ *  description: karaio
+ */
+
+
 routes.get("/post", PostController.getAllPost);
 routes.post("/post", PostController.createPost);
 routes.put("/post/:id", PostController.updatePost);
