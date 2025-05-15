@@ -15,6 +15,7 @@ export class PostDTO{
         return{
             id: body.id,
             title: body.title,
+            description: body.description, 
             author: body.author
             
         };

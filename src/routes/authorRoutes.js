@@ -1,22 +1,59 @@
-import express from "express"
+import express from "express";
 import AuthorController from "../controllers/authorController.js";
 import authMidlleware from "../middleware/authMidlleware.js";
 
 const routes = express.Router();
 
 /**
- * @Swagger
- * tags: [Autores]
+ * @swagger
+ * tags: 
  *  name: Autores
- *  description: Endpoints autores
+ *  description: Endpoints para gerenciamento de autores
  */
+
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *   schemas:
+ *     Author:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "663ccf1e934d1eab3a4ed27f"
+ *         name:
+ *           type: string
+ *           example: "João Silva"
+ *         email:
+ *           type: string
+ *           example: "joao.silva@example.com"
+ *     AuthorInput:
+ *       type: object
+ *       required:
+ *         - name
+ *         - email
+ *       properties:
+ *         name:
+ *           type: string
+ *           example: "João Silva"
+ *         email:
+ *           type: string
+ *           example: "joao.silva@example.com"
+ */
+
 
 /**
  * @swagger
  * /authors:
  *   get:
  *     summary: Lista todos os autores
- *     tags: [Autores]
+ *     tags: 
+ *       - Autores
  *     responses:
  *       200:
  *         description: Lista de autores retornada com sucesso
@@ -28,55 +65,85 @@ const routes = express.Router();
  *                 $ref: '#/components/schemas/Author'
  */
 
-routes.get("/authors", authMidlleware,AuthorController.getAllAuthor);
+routes.get("/authors", authMidlleware, AuthorController.getAllAuthor);
 
 /**
  * @swagger
  * /authors:
  *   post:
- *     summary: Lista todos os autores
- *     tags: [Autores]
+ *     summary: Cria um novo Autor
+ *     tags: 
+ *       - Autores
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AuthorInput'
+ *           example:
+ *             name: "João Silva"
+ *             email: "joao.silva@example.com"
  *     responses:
- *       200:
- *         description: Lista de autores retornada com sucesso
+ *       201:
+ *         description: Autor criado com sucesso
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Author'
+ *               $ref: '#/components/schemas/Author'
+ *       400:
+ *         description: Dados inválidos
+ *       401:
+ *         description: Não autorizado
  */
 
-routes.post("/authors", authMidlleware,AuthorController.createAuthor);
+routes.post("/authors", authMidlleware, AuthorController.createAuthor);
 
 /**
  * @swagger
- * /authors:
- *   get:id:
- *     summary: Lista por id o autor
- *     tags: [Autores]
- *     responses:
- *       200:
- *         description: Lista de autores retornada com sucesso
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Author'
- */
-
-routes.get("/authors/:id", authMidlleware,AuthorController.getAuthorById);
-
-/**
- * @swagger
- * /authors:
+ * /authors/{id}:
  *   get:
- *     summary: Lista todos os autores
- *     tags: [Autores]
+ *     summary: Busca um autor pelo ID
+ *     tags: 
+ *       - Autores
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID do autor
  *     responses:
  *       200:
- *         description: Lista de autores retornada com sucesso
+ *         description: Autor encontrado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Author'
+ *       404:
+ *         description: Autor não encontrado
+ */
+
+routes.get("/authors/:id", authMidlleware, AuthorController.getAuthorById);
+
+/**
+ * @swagger
+ * /authors/search/{name}:
+ *   get:
+ *     summary: Busca autores por nome
+ *     tags: 
+ *       - Autores
+ *     parameters:
+ *       - in: path
+ *         name: name
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Nome do autor
+ *     responses:
+ *       200:
+ *         description: Lista de autores encontrados
  *         content:
  *           application/json:
  *             schema:
@@ -84,46 +151,75 @@ routes.get("/authors/:id", authMidlleware,AuthorController.getAuthorById);
  *               items:
  *                 $ref: '#/components/schemas/Author'
  */
-
-routes.get("/authors/search/:name", authMidlleware,AuthorController.searchAuthorByName)
+routes.get("/authors/search/:name", authMidlleware, AuthorController.searchAuthorByName);
 
 /**
  * @swagger
- * /authors:
+ * /authors/{id}:
  *   delete:
- *     summary: Lista todos os autores
- *     tags: [Autores]
+ *     summary: Remove um autor pelo ID
+ *     tags: 
+ *       - Autores
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID do autor
  *     responses:
- *       200:
- *         description: Lista de autores retornada com sucesso
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Author'
+ *       204:
+ *         description: Autor removido com sucesso (sem conteúdo)
+ *       401:
+ *         description: Não autorizado
+ *       404:
+ *         description: Autor não encontrado
  */
 
-
-routes.delete("/authors/:id", authMidlleware,AuthorController.deletedAuthor);
+routes.delete("/authors/:id", authMidlleware, AuthorController.deletedAuthor);
 
 /**
  * @swagger
- * /authors:
+ * /authors/{id}:
  *   put:
- *     summary: Lista todos os autores
- *     tags: [Autores]
+ *     summary: Atualiza um autor pelo ID
+ *     tags: 
+ *       - Autores
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID do autor
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AuthorInput'
+ *           example:
+ *             name: "João Silva Atualizado"
+ *             email: "joao.atualizado@example.com"
  *     responses:
  *       200:
- *         description: Lista de autores retornada com sucesso
+ *         description: Autor atualizado com sucesso
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Author'
+ *               $ref: '#/components/schemas/Author'
+ *       400:
+ *         description: Dados inválidos
+ *       401:
+ *         description: Não autorizado
+ *       404:
+ *         description: Autor não encontrado
  */
 
-routes.put("/authors/:id", authMidlleware,AuthorController.updateAuthor);
+routes.put("/authors/:id", authMidlleware, AuthorController.updateAuthor);
 
 export default routes;

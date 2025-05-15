@@ -15,7 +15,7 @@ export class PostService{
 
         if (!foundAuthor){
 
-            throw new Error("Post não encontrado");
+            throw new Error("Autor não encontrado");
 
         };
 
