@@ -104,5 +104,5 @@ class AuthorController{
     }
 
 
-//export default AuthorController;
-export default new AuthorController();
+export default AuthorController;
+//export default new AuthorController();
