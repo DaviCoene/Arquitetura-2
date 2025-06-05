@@ -89,4 +89,5 @@ class UserController{
 
 
 
-export default new UserController();
+export default UserController;
+// export default new UserController();

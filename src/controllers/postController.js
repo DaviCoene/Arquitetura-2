@@ -97,5 +97,5 @@ class PostController{
     }
 
 
-//export default PostController;
-export default new PostController();
+export default PostController;
+// export default new PostController();

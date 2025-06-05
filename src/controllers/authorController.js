@@ -44,7 +44,7 @@ class AuthorController{
             
         }
         catch(error){
-            res.status(500).send(error.message)
+            res.status(404).send(error.message)
         }
     };
 
@@ -61,7 +61,7 @@ class AuthorController{
             res.status(200).json(authors.map((author) => new AuthorDTO(author)));
         }
         catch(error){
-            res.status(500).send(error.message)
+            res.status(404).send(error.message)
         }
     };
 
@@ -76,13 +76,13 @@ class AuthorController{
             }
     
             res.status(201).json({
-                message: "Author Criado com sucesso",
+                message: "Author atualizado com sucesso",
                 authors: new AuthorDTO(updateAuthor),
             }
             )
         }
         catch(error){
-            res.status(500).send(error.message)
+            res.status(404).send(error.message)
         }
     }
 
@@ -93,11 +93,10 @@ class AuthorController{
             return res.status(404).send("Author não encontrado")
             }
     
-            res.status(200).json("Autor deletado"
-            )
+            res.status(200).json("Autor deletado")
         }
         catch(error){
-            res.status(500).send(error.message)
+            res.status(404).send(error.message)
         }
     }
     

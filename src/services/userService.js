@@ -29,7 +29,8 @@ export class UserService{
             email: userData.email,
             password: passwordHash,
         }
-        const createdUser = await this.UserRepository.create(userToCreate)
+        const createdUser = await this.UserRepository.create(userToCreate);
+        return new UserDTO(createdUser)
     }
 
     getAllUser = async () => {
